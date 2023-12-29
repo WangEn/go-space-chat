@@ -1,5 +1,6 @@
 version: '3'
-
+# arm https://golang.org/dl/go1.17.2.linux-arm64.tar.gz
+# x86_64 https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
 services:
   my_debian_container:
     image: debian:latest
@@ -14,8 +15,8 @@ services:
       bash -c "
       apt-get update &&
       apt-get install -y wget git &&
-      wget https://golang.org/dl/go1.17.2.linux-arm64.tar.gz &&
-      tar -C /usr/local -xzf go1.17.2.linux-arm64.tar.gz &&
+      wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz &&
+      tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz &&
       export PATH=$PATH:/usr/local/go/bin &&
       go version &&
       cd ~ &&
