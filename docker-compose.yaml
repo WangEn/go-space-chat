@@ -19,7 +19,7 @@ services:
       export PATH=$PATH:/usr/local/go/bin &&
       go version &&
       cd ~ &&
-      git clone https://github.com/WangEn/go-space-chat.git &&
+      if [ -d go-space-chat ]; then (cd go-space-chat && git pull); else git clone https://github.com/WangEn/go-space-chat.git; fi &&
       cd go-space-chat &&
       go run main.go  # 在 Git 项目的根目录下运行 Go 代码
       "
