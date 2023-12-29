@@ -109,7 +109,7 @@ var bot_status = {
     r_y: 0,
     bot_id: '',
     name: '',
-    gender: 0
+    gender: 0,
 };
 
 // 状态记忆
@@ -565,7 +565,7 @@ function sendMessage () {
         return false;
     }
 
-    var value = input.value;
+    var value = input.value.trim();
     input.blur();
 
     // 创建div
@@ -812,7 +812,6 @@ function computeDistance (x, y, x1, y1) {
 
 function createWebSocket () {
     ws = new WebSocket("ws://" + location.hostname + ":9001/ws")
-
     ws.binaryType = 'arraybuffer';
 
     ws.onopen = function () {
@@ -972,7 +971,7 @@ function initTools () {
         input.addEventListener('blur', () => {
             // 设置名称
             if (input.value !== "") {
-                bot_status.name = input.value;
+                bot_status.name = input.value.trim();
                 localStorage.setItem('star_name', bot_status.name);
             }
             // 移除节点
