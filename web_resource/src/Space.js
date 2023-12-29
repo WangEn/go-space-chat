@@ -489,21 +489,34 @@ function bindEvent () {
 
         switch (evt.keyCode) {
             case keys.up:
+            case keys.arrowUp:
                 move_direction.up = false;
                 break;
             case keys.down:
+            case keys.arrowDown:
                 move_direction.down = false;
                 break;
             case keys.right:
+            case keys.arrowRight:
                 move_direction.right = false;
                 break;
             case keys.left:
+            case keys.arrowLeft:
                 move_direction.left = false;
                 break;
             // talk pass
         }
-
-        if (evt.keyCode == keys.up || evt.keyCode == keys.down || evt.keyCode == keys.left || evt.keyCode == keys.right) {
+        const directiionKeys = [
+            keys.up,
+            keys.down,
+            keys.left,
+            keys.right,
+            keys.arrowDown,
+            keys.arrowLeft,
+            keys.arrowRight,
+            keys.arrowUp
+        ]
+        if (directiionKeys.indexOf(evt.keyCode) !== -1) {
             random_points_update_key = true;
             random_points_update_status = 1;
         }
