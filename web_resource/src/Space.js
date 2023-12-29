@@ -581,6 +581,7 @@ function sendMessage () {
     // }
     //
     // createMessageBubble(value)
+    console.log(value, value.indexOf('name:'), value.indexOf('name:') === 0)
     if (value.indexOf('name:') === 0) {
         const name = value.slice(5)
         bot_status.name = name;
