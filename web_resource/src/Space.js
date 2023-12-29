@@ -1065,7 +1065,7 @@ function welcome() {
         "3. 左上角修改昵称、性别，点击空白修改成功",
         "4. 新增用户上线频率全天分布图",
         "git 地址：<a href='https://github.com/sunshinev/go-space-chat' target='_blank'>https://github.com/sunshinev/go-space-chat</a>",
-        "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
+        // "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
     ]
     for (var id in str) {
         addSystemMessageToChatWindow("管理员",str[id])
