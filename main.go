@@ -4,7 +4,7 @@ import (
 	"log"
 	_ "net/http/pprof"
 
-	"github.com/sunshinev/go-space-chat/core"
+	"github.com/WangEn/go-space-chat/core"
 )
 
 func main() {

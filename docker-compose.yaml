@@ -15,12 +15,11 @@ services:
       bash -c "
       apt-get update &&
       apt-get install -y wget git &&
-      wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz &&
-      tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz &&
+      apt-get install -y golang-go &&
       export PATH=$PATH:/usr/local/go/bin &&
       go version &&
       cd ~ &&
-      git clone https://github.com/sunshinev/go-space-chat.git &&
+      git clone https://github.com/WangEn/go-space-chat.git &&
       cd go-space-chat &&
       go run main.go  # 在 Git 项目的根目录下运行 Go 代码
       "

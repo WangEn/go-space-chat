@@ -10,8 +10,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
-	"github.com/sunshinev/go-space-chat/component"
-	pb "github.com/sunshinev/go-space-chat/proto/star"
+	"github.com/WangEn/go-space-chat/component"
+	pb "github.com/WangEn/go-space-chat/proto/star"
 )
 
 // Core 核心处理

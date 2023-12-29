@@ -2,7 +2,7 @@
  * author huajie.sun
  * from china
  * 2020年04月21日15:41:35
- * https://github.com/sunshinev/go-space-chat
+ * https://github.com/WangEn/go-space-chat
  * license MIT
  * @type {null}
  */
@@ -796,7 +796,7 @@ function computeDistance(x, y, x1, y1) {
 }
 
 function createWebSocket() {
-    ws = new WebSocket("ws://" + location.hostname + ":9000/ws")
+    ws = new WebSocket("ws://" + location.hostname + ":9001/ws")
 
     ws.binaryType = 'arraybuffer';
 
@@ -1064,7 +1064,7 @@ function welcome() {
         "2. 空格开启聊天框，回车发送消息",
         "3. 左上角修改昵称、性别，点击空白修改成功",
         "4. 新增用户上线频率全天分布图",
-        "git 地址：<a href='https://github.com/sunshinev/go-space-chat' target='_blank'>https://github.com/sunshinev/go-space-chat</a>",
+        "git 地址：<a href='https://github.com/WangEn/go-space-chat' target='_blank'>https://github.com/WangEn/go-space-chat</a>",
         // "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
     ]
     for (var id in str) {

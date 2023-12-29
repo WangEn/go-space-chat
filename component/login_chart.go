@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sunshinev/go-space-chat/config"
+	"github.com/WangEn/go-space-chat/config"
 )
 
 // LoginChart ...
