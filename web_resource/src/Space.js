@@ -32,6 +32,10 @@ var keys = {
     down: 83, // s
     left: 65, //a
     right: 68, //d
+    arrowLeft: 37, // arrow left
+    arrowUp: 38, // arrow up
+    arrowRight: 39, // arrow right
+    arrowDown: 40, // arrowdown
     talk: 32, //space
     send: 13
 };
@@ -83,7 +87,7 @@ var current_space = {
     y: 0
 };
 
-var mouse_poi = {x: 0, y: 0};
+var mouse_poi = { x: 0, y: 0 };
 
 // 输入框dom
 var input = null;
@@ -130,7 +134,7 @@ FPSMeter.theme.dark.count.fontSize = '12px'
 var meter = new FPSMeter();
 
 
-function initCtx() {
+function initCtx () {
     canvas = document.getElementById("test");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -161,7 +165,7 @@ function initCtx() {
     randomPointsUpdate()
 }
 
-function canvasHandle() {
+function canvasHandle () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "rgb(20,7,34)";
@@ -190,7 +194,7 @@ function canvasHandle() {
 }
 
 // star 自然振动
-function randomPointsUpdate() {
+function randomPointsUpdate () {
 
     setInterval(function () {
         if (random_points_update_key) {
@@ -204,7 +208,7 @@ function randomPointsUpdate() {
 
 }
 
-function immediateUpdate() {
+function immediateUpdate () {
     if (random_points_update_status) {
         random_points_update = [
             Math.random() - 0.5,
@@ -215,7 +219,7 @@ function immediateUpdate() {
     }
 }
 
-function randomPoint() {
+function randomPoint () {
 
     // 计算每个space的宽高
     var width = points_scope.x.max - points_scope.x.min;
@@ -230,7 +234,7 @@ function randomPoint() {
         var c = computeColor(z);
         var s = computeSize(z);
 
-        p.push({x: x, y: y, z: z, c: c, s: s})
+        p.push({ x: x, y: y, z: z, c: c, s: s })
     }
 
 
@@ -242,7 +246,7 @@ function randomPoint() {
 }
 
 
-function updatePoints(points, values = [0, 0, 0]) {
+function updatePoints (points, values = [0, 0, 0]) {
 
 
     for (var i in points) {
@@ -270,24 +274,24 @@ function updatePoints(points, values = [0, 0, 0]) {
     return points;
 }
 
-function randomValue(max, min = 0) {
+function randomValue (max, min = 0) {
     return Math.floor(Math.random() * (max - min)) + min
 }
 
 // 颜色越来越深
-function computeColor(z) {
+function computeColor (z) {
     var v = Math.floor((z * (255 - 100)) / (points_scope.z.max - points_scope.z.min)) + 100
     return "rgb(" + v + "," + v + "," + v + ")";
 }
 
 // 尺寸越来越小
-function computeSize(z) {
+function computeSize (z) {
     // 设定视点处，半径为10
     return z * visual_star_size / visual.z;
 }
 
 // 绘制star
-function drawn(ctx, points = []) {
+function drawn (ctx, points = []) {
     for (var i in points) {
         var p = pointConvert(points[i].x, points[i].y, points[i].z, points[i].c, points[i].s);
         // 这里要做一些舍弃动作,视野之外的粒子，不予绘制
@@ -298,7 +302,7 @@ function drawn(ctx, points = []) {
 }
 
 // 核心转换算法
-function pointConvert(x, y, z, c, s) {
+function pointConvert (x, y, z, c, s) {
     var p = {
         x: (x - visual.x) * visual.z / (visual.z - z) + visual.x,
         y: (y - visual.y) * visual.z / (visual.z - z) + visual.y,
@@ -309,7 +313,7 @@ function pointConvert(x, y, z, c, s) {
     return p;
 }
 
-function drawnPoint(ctx, x, y, c, s) {
+function drawnPoint (ctx, x, y, c, s) {
     ctx.beginPath();
     ctx.arc(x, y, s, 0, 2 * Math.PI)
     ctx.fillStyle = c;
@@ -317,7 +321,7 @@ function drawnPoint(ctx, x, y, c, s) {
 }
 
 // 绘制矩形
-function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
+function drawMatrix (x = canvas.width / 2, y = canvas.height / 2) {
     // 矩形
     // ctx.fillStyle = "rgb(200,0,0)"
     // ctx.fillRect(x, y, 50, 30);
@@ -359,7 +363,7 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
 
 
 // 绘制矩形
-function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender, city) {
+function drawMatrixGuest (x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender, city) {
     // 矩形
     // ctx.fillStyle = "rgb(200,0,0)"
     // ctx.fillRect(x, y, 50, 30);
@@ -397,7 +401,7 @@ function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, 
 }
 
 // x,y 的坐标是眼眶的坐标,理论上来讲，这个地方应该用角度来计算位置
-function moveEye(x, y, r) {
+function moveEye (x, y, r) {
 
     var r_pupil = 5;
 
@@ -443,7 +447,7 @@ function moveEye(x, y, r) {
 }
 
 // 事件
-function bindEvent() {
+function bindEvent () {
     window.addEventListener('keydown', (evt) => {
         // 如果input框弹出，那么禁止其他键盘事件
         if (input_deny_move_key && evt.keyCode != keys.send) {
@@ -453,18 +457,22 @@ function bindEvent() {
         // 缩放
         switch (evt.keyCode) {
             case keys.up:
+            case keys.arrowUp:
                 move_direction.up = true;
                 move_direction.down = false;
                 break;
             case keys.down:
+            case keys.arrowDown:
                 move_direction.up = false;
                 move_direction.down = true;
                 break;
             case keys.right:
+            case keys.arrowRight:
                 move_direction.right = true;
                 move_direction.left = false;
                 break;
             case keys.left:
+            case keys.arrowLeft:
                 move_direction.left = true;
                 move_direction.right = false;
                 break;
@@ -514,7 +522,7 @@ function bindEvent() {
 }
 
 
-function createInput() {
+function createInput () {
 
     if (input != null) {
         return false;
@@ -552,7 +560,7 @@ function createInput() {
 }
 
 // todo
-function sendMessage() {
+function sendMessage () {
     if (!input || !input.value) {
         return false;
     }
@@ -573,6 +581,12 @@ function sendMessage() {
     // }
     //
     // createMessageBubble(value)
+    if (value.indexOf('name:') === 0) {
+        const name = value.slice(5)
+        bot_status.name = name;
+        localStorage.setItem('star_name', bot_status.name);
+        return;
+    }
 
     // 发送文字消息
     sendStatusByWs(value);
@@ -580,7 +594,7 @@ function sendMessage() {
 
 
 // 创建气泡
-function createMessageBubble(value) {
+function createMessageBubble (value) {
     var bubble = document.createElement('p')
     bubble.innerHTML = "<span style='padding:0 5px;margin:5px 0;display:inline-block;background-color:rgba(200,200,200,0.2);border:1px solid rgba(200,200,200,0.2);border-radius:10px;'>" + value + "</span>";
     show_message_box.appendChild(bubble)
@@ -590,7 +604,7 @@ function createMessageBubble(value) {
     }, 1000 * 8);
 }
 
-function createGuestBot() {
+function createGuestBot () {
     for (var i in guest_bots) {
         if (i === bot_status.bot_id) {
             if (show_message_box == null) {
@@ -607,10 +621,10 @@ function createGuestBot() {
                 createMessageBubble(guest_bots[i].msg)
                 guest_bots[i].msg = '';
             }
-        }else if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
+        } else if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
             drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y,
                 guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y,
-                guest_bots[i].name, guest_bots[i].gender,guest_bots[i].pos_info.getCity())
+                guest_bots[i].name, guest_bots[i].gender, guest_bots[i].pos_info.getCity())
             // console.info(guest_bots[i].show_message_box)
             showGuestMessage(i)
             // console.info(guest_bots[i].show_message_box)
@@ -628,7 +642,7 @@ function createGuestBot() {
  * @param guestX
  * @param guestY
  */
-function isShowGuest(guestX, guestY) {
+function isShowGuest (guestX, guestY) {
     if (guestX < 0) {
         return false;
     }
@@ -649,7 +663,7 @@ function isShowGuest(guestX, guestY) {
 }
 
 
-function showGuestMessage(name) {
+function showGuestMessage (name) {
     // 创建div
     if (!guest_show_message_box[name]) {
 
@@ -666,7 +680,7 @@ function showGuestMessage(name) {
 }
 
 // 创建气泡
-function createMessageBubbleGuest(name, value) {
+function createMessageBubbleGuest (name, value) {
     let bot = guest_bots[name];
     let show_message_box = guest_show_message_box[name];
 
@@ -679,7 +693,7 @@ function createMessageBubbleGuest(name, value) {
     }, 1000 * 15);
 }
 
-function moveBubbleGuest(name) {
+function moveBubbleGuest (name) {
     let bot = guest_bots[name];
     let show_message_box = guest_show_message_box[name];
 
@@ -691,7 +705,7 @@ function moveBubbleGuest(name) {
     );
 }
 
-function moveBubble() {
+function moveBubble () {
     if (show_message_box != null) {
         show_message_box.setAttribute("style", "position:fixed;" +
             "left:" + (visual.x) + "px;" +
@@ -703,7 +717,7 @@ function moveBubble() {
 }
 
 // 核心移动
-function matrixMove() {
+function matrixMove () {
 
     var poi_y = matrix_poi.y;
     var poi_x = matrix_poi.x;
@@ -769,7 +783,7 @@ function matrixMove() {
 }
 
 // 视角缩放 far near
-function zoom(direction = 'far') {
+function zoom (direction = 'far') {
     // 步进灵敏度
     var acc = 0.1;
     // 平滑灵敏度
@@ -791,11 +805,11 @@ function zoom(direction = 'far') {
 }
 
 // 计算两点的距离
-function computeDistance(x, y, x1, y1) {
+function computeDistance (x, y, x1, y1) {
     return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2))
 }
 
-function createWebSocket() {
+function createWebSocket () {
     ws = new WebSocket("ws://" + location.hostname + ":9001/ws")
 
     ws.binaryType = 'arraybuffer';
@@ -826,7 +840,7 @@ function createWebSocket() {
                 msg: bot_list[i].getMsg(),
                 name: bot_list[i].getName(),
                 gender: bot_list[i].getGender(),
-                pos_info : bot_list[i].getPosInfo(),
+                pos_info: bot_list[i].getPosInfo(),
             };
 
             addMessageToChatWindow(guest_bots[bot_list[i].getBotId()])
@@ -841,7 +855,7 @@ function createWebSocket() {
 // 状态同步的频率限制
 var rateKey = true
 
-function sendStatusByWs(msg = '') {
+function sendStatusByWs (msg = '') {
 
     if (!is_ws_open) {
         return false;
@@ -863,8 +877,8 @@ function sendStatusByWs(msg = '') {
     if (msg === "") {
         if (rateKey) {
             rateKey = false
-            setTimeout(function(){rateKey = true},30)
-        }else {
+            setTimeout(function () { rateKey = true }, 30)
+        } else {
             return
         }
     }
@@ -894,7 +908,7 @@ function sendStatusByWs(msg = '') {
 }
 
 
-function initLocalStorage() {
+function initLocalStorage () {
     var name = localStorage.getItem('star_name');
     if (name !== null && name !== "") {
         bot_status.name = name;
@@ -910,7 +924,7 @@ function initLocalStorage() {
     }
 }
 
-function initTools() {
+function initTools () {
     var tool_box = document.createElement('div');
     tool_box.setAttribute("style", "" +
         "position:fixed;" +
@@ -982,7 +996,7 @@ function initTools() {
 
 }
 
-function createBtn(tool_box, src, title = '') {
+function createBtn (tool_box, src, title = '') {
     var button = document.createElement("img")
     button.setAttribute("style", "" +
         // "display:inline-block;" +
@@ -1002,7 +1016,7 @@ function createBtn(tool_box, src, title = '') {
     return button;
 }
 
-function createGlobalChatWindow() {
+function createGlobalChatWindow () {
     globalChatWindow.setAttribute("style", "" +
         "position:fixed;" +
         "right:5px;" +
@@ -1010,26 +1024,26 @@ function createGlobalChatWindow() {
         "width:400px;" +
         "height:70%;" +
         "color:rgba(200,200,200,0.8);" +
-        "border:1px solid rgba(200,200,200,0.8);"+
+        "border:1px solid rgba(200,200,200,0.8);" +
         "cursor:default;" +
-        "overflow-y:auto;"+
+        "overflow-y:auto;" +
         "border-radius:5px;");
 
     document.body.appendChild(globalChatWindow)
 }
 
 
-function addSystemMessageToChatWindow(name,message) {
-    if (message.trim() === ""){
+function addSystemMessageToChatWindow (name, message) {
+    if (message.trim() === "") {
         return
     }
     var mDiv = document.createElement("div")
-    mDiv.setAttribute("style","" +
+    mDiv.setAttribute("style", "" +
         "margin:2px;" +
         "");
-    mDiv.innerHTML = ""+
+    mDiv.innerHTML = "" +
         "<div>" +
-        "<span style='color: darkred'>"+name+"：</span>" +message
+        "<span style='color: darkred'>" + name + "：</span>" + message
     "</div>"
     "";
 
@@ -1037,18 +1051,18 @@ function addSystemMessageToChatWindow(name,message) {
     globalChatWindow.scrollTop = globalChatWindow.scrollHeight
 }
 
-function addMessageToChatWindow(bot) {
-    if (bot.msg.trim() === ""){
+function addMessageToChatWindow (bot) {
+    if (bot.msg.trim() === "") {
         return
     }
     var mDiv = document.createElement("div")
-    mDiv.setAttribute("style","" +
+    mDiv.setAttribute("style", "" +
         "margin:2px;" +
         "");
-    mDiv.innerHTML = ""+
+    mDiv.innerHTML = "" +
         "<div>" +
-        "<span style='color: lightseagreen'>["+bot.pos_info.getCity()+bot.pos_info.getIsp()+"]</span>" +
-        "<span style='color: darkgreen'>@"+bot.name+"：</span>" +bot.msg
+        "<span style='color: lightseagreen'>[" + bot.pos_info.getCity() + bot.pos_info.getIsp() + "]</span>" +
+        "<span style='color: darkgreen'>@" + bot.name + "：</span>" + bot.msg
     "</div>"
     "";
 
@@ -1056,19 +1070,19 @@ function addMessageToChatWindow(bot) {
     globalChatWindow.scrollTop = globalChatWindow.scrollHeight
 }
 
-function welcome() {
+function welcome () {
     var str = [
         "欢迎来到这个秘密的地方，茫茫人海，如果能在这里相遇，说明是一种缘分~",
         "互动方式如下：",
         "1. W A S D进行上下左右",
         "2. 空格开启聊天框，回车发送消息",
         "3. 左上角修改昵称、性别，点击空白修改成功",
-        "4. 新增用户上线频率全天分布图",
-        "git 地址：<a href='https://github.com/WangEn/go-space-chat' target='_blank'>https://github.com/WangEn/go-space-chat</a>",
+        // "4. 新增用户上线频率全天分布图",
+        // "git 地址：<a href='https://github.com/WangEn/go-space-chat' target='_blank'>https://github.com/WangEn/go-space-chat</a>",
         // "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
     ]
     for (var id in str) {
-        addSystemMessageToChatWindow("管理员",str[id])
+        addSystemMessageToChatWindow("管理员", str[id])
     }
 }
 
